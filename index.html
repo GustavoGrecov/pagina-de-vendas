@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Micro RC Drift Car 1:64 - Experiência premium. Velocidade, precisão e adrenalina na palma da mão.">
+    <meta name="keywords"
+        content="carrinho controle remoto, RC drift, carrinho drift 1:64, micro RC, hobby, colecionáveis">
+    <title>RC DRIFT CAR 1:64 - Premium Micro Racing Experience</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ========================================
+           RESET & BASE
+        ======================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ========================================
+           LOADING SCREEN
+        ======================================== */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #000000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-car {
+            font-size: 120px;
+            margin-bottom: 40px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+        }
+
+        .loading-bar-container {
+            width: 300px;
+            height: 2px;
+            background: #222222;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background: #ffffff;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .loading-text {
+            margin-top: 20px;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #666666;
+        }
+
+        /* ========================================
+           NAVBAR
+        ======================================== */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #222222;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 24px;
+            letter-spacing: 2px;
+            color: #ffffff;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #999999;
+            text-decoration: none;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #ffffff;
+        }
+
+        .nav-cta-button {
+            background: linear-gradient(135deg, #ff0000 0%, #cc0000 100%);
+            color: #ffffff !important;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            animation: pulse-nav-cta 2s ease-in-out infinite;
+            box-shadow: 0 5px 20px rgba(255, 0, 0, 0.4);
+        }
+
+        @keyframes pulse-nav-cta {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .nav-cta-button:hover {
+            background: linear-gradient(135deg, #ff3333 0%, #ff0000 100%) !important;
+            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.6);
+        }
+
+        /* ========================================
+           HERO PARALLAX SECTION
+        ======================================== */
+        #hero {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .hero-bg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0.9) 100%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 60px;
+            max-width: 600px;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 80px;
+            line-height: 0.9;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+        }
+
+        .hero-subtitle {
+            font-size: 14px;
+            letter-spacing: 4px;
+            color: #666666;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #cccccc;
+            margin-bottom: 40px;
+            font-weight: 300;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn-transparent {
+            padding: 15px 40px;
+            border: 1px solid #ffffff;
+            background: transparent;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-transparent:hover {
+            background: #ffffff;
+            color: #000000;
+        }
+
+        .btn-white {
+            padding: 15px 40px;
+            border: none;
+            background: #ffffff;
+            color: #000000;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-white:hover {
+            background: #cccccc;
+        }
+
+        .section-number {
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 120px;
+            color: rgba(255, 255, 255, 0.05);
+            z-index: 2;
+            line-height: 1;
+        }
+
+        /* ========================================
+           SECTION BASE
+        ======================================== */
+        section {
+            position: relative;
+            padding: 120px 60px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-label {
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: #666666;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 60px;
+            letter-spacing: 2px;
+            color: #ffffff;
+        }
+
+        /* ========================================
+           PERFORMANCE SECTION
+        ======================================== */
+        #performance {
+            background: #000000;
+        }
+
+        .performance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: center;
+        }
+
+        .performance-video {
+            position: relative;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #222222;
+        }
+
+        .performance-video video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .performance-features {
+            padding: 40px;
+        }
+
+        .feature-item {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 1px solid #111111;
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .feature-desc {
+            font-size: 14px;
+            color: #999999;
+            line-height: 1.8;
+        }
+
+        /* ========================================
+           GALLERY SECTION
+        ======================================== */
+        #gallery {
+            background: #000000;
+            padding: 120px 60px;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2px;
+            background: #000000;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* ========================================
+           TESTIMONIALS
+        ======================================== */
+        #reviews {
+            background: #000000;
+            padding: 120px 60px;
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .review-card {
+            background: #000000;
+            border: 1px solid #222222;
+            padding: 40px;
+            transition: border-color 0.3s ease;
+        }
+
+        .review-card:hover {
+            border-color: #ffffff;
+        }
+
+        .review-stars {
+            color: #FFD700;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #cccccc;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .review-author {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666666;
+        }
+
+        /* ========================================
+           PREMIUM SECTION DIVIDER
+        ======================================== */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 60px 0;
+            opacity: 0.5;
+        }
+
+        .divider-line {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #333, transparent);
+            width: 150px;
+        }
+
+        .divider-icon {
+            font-size: 24px;
+            color: #00ff00;
+            animation: pulse-icon 2s infinite;
+        }
+
+        @keyframes pulse-icon {
+            0% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+        }
+
+        /* ========================================
+           SHOPEE STYLE REVIEWS VIDEO CSS
+        ======================================== */
+        .review-card {
+            background: #111;
+            border: 1px solid #222;
+            padding: 24px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .review-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ff5722;
+            /* Shopee orange-ish */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .review-date {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .review-rating {
+            color: #ffc107;
+            font-size: 14px;
+            letter-spacing: 1px;
+        }
+
+        .review-text {
+            font-size: 14px;
+            color: #ccc;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+
+        .review-media-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #333;
+        }
+
+        .review-media-wrapper.small-scale {
+            max-width: 60%;
+            /* Escala menor para a imagem */
+        }
+
+        .review-media {
+            width: 100%;
+            display: block;
+        }
+
+        .verified-badge {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            font-size: 10px;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .review-footer {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #222;
+        }
+
+        /* ========================================
+           CAROUSEL GALLERY
+        ======================================== */
+        .carousel-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .carousel-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/10;
+            overflow: hidden;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-dots {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .dot {
+            height: 12px;
+            width: 12px;
+            margin: 0 8px;
+            background-color: #444444;
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background-color: #00ff00;
+            transform: scale(1.3);
+        }
+
+        .dot:hover {
+            background-color: #00ff00;
+        }
+
+        /* ========================================
+           FAQ SECTION
+        ======================================== */
+        #faq {
+            background: #000000;
+            padding: 120px 60px;
+        }
+
+        .faq-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #222222;
+            margin-bottom: 20px;
+        }
+
+        .faq-question {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 600;
+            padding: 30px 0;
+            text-align: left;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            color: #cccccc;
+        }
+
+        .faq-icon {
+            font-size: 24px;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: #999999;
+            line-height: 1.8;
+            font-size: 14px;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding-bottom: 30px;
+        }
+
+        /* ========================================
+           SPECS / TRUST
+        ======================================== */
+        #specs {
+            background: #000000;
+            border-top: 1px solid #111111;
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1px;
+            background: #111111;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .spec-item {
+            background: #000000;
+            padding: 40px 30px;
+            text-align: center;
+            transition: background 0.3s ease;
+        }
+
+        .spec-item:hover {
+            background: #0a0a0a;
+        }
+
+        .spec-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .spec-title {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .spec-desc {
+            font-size: 12px;
+            color: #666666;
+            line-height: 1.6;
+        }
+
+        /* ========================================
+           CHECKOUT / GARAGE
+        ======================================== */
+        #garage {
+            background: #000000;
+            padding: 80px 60px;
+            text-align: center;
+            border-top: 1px solid #222222;
+            position: relative;
+        }
+
+        .urgency-tag {
+            display: inline-block;
+            background: #ff6600;
+            color: #ffffff;
+            padding: 8px 20px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 40px;
+            border-radius: 20px;
+        }
+
+        .garage-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: left;
+        }
+
+        .garage-left {
+            padding: 20px;
+        }
+
+        .garage-main-title {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 20px;
+            color: #ffffff;
+        }
+
+        .garage-stock {
+            font-size: 14px;
+            color: #999999;
+            margin-bottom: 40px;
+        }
+
+        .price-breakdown {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid #222222;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #222222;
+            font-size: 14px;
+        }
+
+        .price-row:last-child {
+            border-bottom: none;
+        }
+
+        .price-row.discount-row {
+            color: #ff6666;
+        }
+
+        .price-value {
+            font-weight: 600;
+        }
+
+        .price-value.free {
+            color: #00ff00;
+            font-weight: 700;
+        }
+
+        .total-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 255, 0, 0.1);
+            padding: 20px 30px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        .total-label {
+            font-size: 16px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .total-value {
+            font-size: 32px;
+            font-weight: 900;
+            color: #00ff00;
+        }
+
+        .installment-text {
+            font-size: 12px;
+            color: #999999;
+            margin-bottom: 30px;
+        }
+
+        .btn-secure-checkout {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #00cc00 0%, #00aa00 100%);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .btn-secure-checkout:hover {
+            background: linear-gradient(135deg, #00ee00 0%, #00cc00 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 204, 0, 0.4);
+        }
+
+        .secure-badge {
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            opacity: 0.9;
+        }
+
+        .guarantee-badges {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .badge-item {
+            font-size: 12px;
+            color: #999999;
+        }
+
+        .garage-right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .product-showcase {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .showcase-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            position: relative;
+            z-index: 2;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .showcase-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(0, 255, 0, 0.3) 0%, transparent 70%);
+            filter: blur(40px);
+            animation: pulse-glow 2s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.1);
+            }
+        }
+
+        .payment-icons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 60px;
+            opacity: 0.5;
+        }
+
+        /* ========================================
+           FOOTER
+        ======================================== */
+        footer {
+            background: #000000;
+            padding: 60px;
+            border-top: 1px solid #111111;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-links a {
+            color: #666666;
+            text-decoration: none;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #ffffff;
+        }
+
+        .copyright {
+            font-size: 11px;
+            color: #333333;
+            letter-spacing: 1px;
+        }
+
+        /* ========================================
+           RESPONSIVE
+        ======================================== */
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+                /* Hide desktop menu on mobile for now, or simplify */
+                /* Ideally we need a hamburger menu, but for now let's keep it simple or hide non-critical */
+            }
+
+            /* Mobile Menu - Improved Alignment */
+            nav {
+                display: flex;
+                flex-direction: column;
+                /* Stack logo and menu */
+                align-items: flex-start;
+                gap: 10px;
+                padding: 15px 20px;
+            }
+
+            .logo {
+                font-size: 20px;
+                /* Slightly smaller logo */
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: flex-start;
+                padding-bottom: 5px;
+            }
+
+            /* Mobile Menu - Horizontal Scroll with CTA First */
+            .nav-links {
+                display: flex;
+                flex-wrap: nowrap;
+                justify-content: flex-start;
+                gap: 15px;
+                font-size: 11px;
+                /* Readable text */
+                letter-spacing: 0.5px;
+                overflow-x: auto;
+                /* Enable scrolling */
+                padding-bottom: 10px;
+                /* Space for scrollbar */
+                width: 100%;
+                margin: 0;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .nav-links li {
+                flex: 0 0 auto;
+                text-align: center;
+                min-width: auto;
+            }
+
+            /* Make "COMPRAR AGORA" (last item) appear FIRST */
+            .nav-links li:last-child {
+                order: -1;
+                margin-right: 5px;
+            }
+
+            .nav-links a {
+                padding: 5px 8px;
+                display: block;
+                white-space: nowrap;
+            }
+
+            .hero-content {
+                padding: 120px 20px 60px 20px;
+                /* More top padding to clear menu */
+                margin-top: 0;
+            }
+
+            /* Fix Hero Background Image - Full Cover */
+            .hero-bg img {
+                object-fit: cover;
+                /* Back to cover to fill screen */
+                object-position: center center;
+                top: 0;
+                transform: none;
+                /* Reset transform */
+                opacity: 0.5;
+                height: 100vh;
+                /* Ensure full height */
+            }
+
+            /* Reduce Title Size to Fit */
+            .hero-title {
+                font-size: 36px;
+                line-height: 1.1;
+                margin-bottom: 15px;
+            }
+
+            .hero-description {
+                font-size: 14px;
+                max-width: 100%;
+            }
+
+            .section-number {
+                display: none;
+                /* Hide big number on mobile to save space */
+            }
+
+
+            section {
+                padding: 60px 20px !important;
+                /* Force padding override */
+            }
+
+            #garage,
+            #gallery,
+            #reviews,
+            #faq,
+            #specs {
+                padding: 60px 20px !important;
+            }
+
+            .performance-grid {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .reviews-grid {
+                display: flex;
+                /* Change to flex for horizontal scrolling */
+                grid-template-columns: none;
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                gap: 20px;
+                padding-bottom: 20px;
+                /* Space for scrollbar */
+                -webkit-overflow-scrolling: touch;
+                margin: 0 -20px;
+                /* Negative margin to go full width */
+                padding: 0 20px 20px 20px;
+                /* Inner padding to offset negative margin */
+            }
+
+            .review-card {
+                flex: 0 0 85%;
+                /* Show 85% of card to encourage scrolling */
+                scroll-snap-align: center;
+                padding: 20px;
+                margin-right: 0;
+            }
+
+            .review-media-wrapper.small-scale {
+                max-width: 100%;
+                /* Full width on mobile */
+            }
+
+            .hero-cta {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn-transparent,
+            .btn-white {
+                width: 100%;
+                text-align: center;
+            }
+
+            .garage-container {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .garage-main-title {
+                font-size: 24px;
+            }
+
+            .garage-stock {
+                font-size: 12px;
+            }
+
+            .product-showcase {
+                max-width: 100%;
+            }
+
+            .btn-buy-now {
+                padding: 20px;
+                font-size: 16px;
+                width: 100%;
+            }
+
+            .price-row {
+                font-size: 13px;
+            }
+
+            .total-value {
+                font-size: 28px;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .spec-item {
+                padding: 30px 20px;
+            }
+
+            .payment-icons img {
+                max-width: 80% !important;
+            }
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========================================
+         LOADING SCREEN
+    ======================================== -->
+    <div id="loading-screen">
+        <div class="loading-car">🏎️</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loadingBar"></div>
+        </div>
+        <div class="loading-text">Preparando experiência...</div>
+    </div>
+
+    <!-- ========================================
+         NAVBAR
+    ======================================== -->
+    <nav>
+        <div class="logo">RC DRIFT 1:64</div>
+        <ul class="nav-links">
+            <li><a href="#hero">Carro</a></li>
+            <li><a href="#performance">Performance</a></li>
+            <li><a href="#gallery">Galeria</a></li>
+            <li><a href="#reviews">Avaliações</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#garage" class="nav-cta-button">COMPRAR AGORA</a></li>
+        </ul>
+    </nav>
+
+    <!-- ========================================
+         HERO SECTION
+    ======================================== -->
+    <section id="hero">
+        <div class="hero-bg">
+            <img src="https://iqptejsfgxyggswmeggh.supabase.co/storage/v1/object/public/flower/carrinhoprojeto-ezgif.com-video-to-webp-converter.webp"
+                alt="RC Drift Car">
+        </div>
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <h1 class="hero-title">VELOCIDADE<br>DRIFT<br>PRECISÃO</h1>
+            <p class="hero-subtitle">RC DRIFT CAR 1:64</p>
+            <p class="hero-description">
+                Engenharia de precisão micro. Sistema de giroscópio integrado.
+                Controle absoluto em cada curva. Adrenalina profissional na palma da mão.
+                <strong style="color: #00ff66; display: block; margin-top: 15px;">
+                    🎄 O presente perfeito de Natal para seu filho!
+                </strong>
+            </p>
+            <div class="hero-cta">
+                <button class="btn-transparent"
+                    onclick="document.getElementById('performance').scrollIntoView({behavior: 'smooth'})">EXPLORAR</button>
+                <button class="btn-white"
+                    onclick="document.getElementById('garage').scrollIntoView({behavior: 'smooth'})">ADICIONAR À
+                    GARAGEM</button>
+            </div>
+        </div>
+
+        <div class="section-number">01</div>
+    </section>
+
+    <!-- ========================================
+         PERFORMANCE
+    ======================================== -->
+    <section id="performance">
+        <div class="section-header">
+            <p class="section-label">Engenharia Micro</p>
+            <h2 class="section-title">Performance & Controle</h2>
+        </div>
+
+        <div class="performance-grid">
+            <div class="performance-video">
+                <video
+                    src="https://iqptejsfgxyggswmeggh.supabase.co/storage/v1/object/public/flower/8f3d5d4a-445a-416e-a36a-5c7b9fd823c7-h265-hd.mp4"
+                    autoplay loop muted playsinline></video>
+            </div>
+
+            <div class="performance-features">
+                <div class="feature-item">
+                    <h3 class="feature-title"><span
+                            style="color: #ff0000; margin-right: 8px; font-size: 1.2em;">✔</span>Sistema de Giroscópio
+                        Integrado</h3>
+                    <p class="feature-desc">
+                        Estabilização automática para drifts perfeitos em alta velocidade.
+                        Tecnologia de ponta em escala micro.
+                    </p>
+                </div>
+
+                <div class="feature-item">
+                    <h3 class="feature-title"><span
+                            style="color: #ff0000; margin-right: 8px; font-size: 1.2em;">✔</span>LED Funcional de Alto
+                        Brilho</h3>
+                    <p class="feature-desc">
+                        Faróis e lanternas totalmente funcionais com iluminação LED.
+                        Realismo cinematográfico em operações noturnas.
+                    </p>
+                </div>
+
+                <div class="feature-item">
+                    <h3 class="feature-title"><span
+                            style="color: #ff0000; margin-right: 8px; font-size: 1.2em;">✔</span>Bateria de Longa
+                        Duração</h3>
+                    <p class="feature-desc">
+                        Carga rápida via USB-C. Autonomia estendida para sessões prolongadas de drift.
+                    </p>
+                </div>
+
+                <div class="feature-item">
+                    <h3 class="feature-title"><span
+                            style="color: #ff0000; margin-right: 8px; font-size: 1.2em;">✔</span>Compatibilidade
+                        Universal</h3>
+                    <p class="feature-desc">
+                        Escala 1:64 compatível com pistas Hot Wheels. Controle 2.4GHz com alcance de 30m.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         PREMIUM DIVIDER
+    ======================================== -->
+
+
+    <!-- ========================================
+         GALLERY
+    ======================================== -->
+    <section id="gallery">
+        <div class="section-header">
+            <p class="section-label">Experiência Real</p>
+            <h2 class="section-title">O Presente de Natal Que Seu Filho Vai Amar</h2>
+        </div>
+
+        <div class="carousel-container">
+            <div class="carousel-wrapper">
+                <div class="carousel-slide active">
+                    <img src="image1.png" alt="RC Drift ação 1">
+                </div>
+                <div class="carousel-slide">
+                    <img src="image2.jpg" alt="RC Drift ação 2">
+                </div>
+                <div class="carousel-slide">
+                    <img src="image3.jpg" alt="RC Drift ação 3">
+                </div>
+            </div>
+            <div class="carousel-dots">
+                <span class="dot active" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         REVIEWS
+    ======================================== -->
+    <section id="reviews">
+        <div class="section-header">
+            <p class="section-label">CLIENTES VERIFICADOS</p>
+            <h2 class="section-title">QUEM COMPROU, APROVOU!</h2>
+        </div>
+
+        <div class="reviews-grid">
+            <!-- Review 1 - Video -->
+            <div class="review-card featured">
+                <div class="review-header">
+                    <div class="review-user">
+                        <div class="user-avatar">M</div>
+                        <div class="user-info">
+                            <span class="user-name">Marina S.</span>
+                            <span class="review-date">Há 2 dias</span>
+                        </div>
+                    </div>
+                    <div class="review-rating">★★★★★</div>
+                </div>
+                <p class="review-text">
+                    "Gente, que carrinho incrível! 😱 Meu filho pirou na batatinha kkkk. O controle é muito sensível, dá
+                    pra fazer uns drifts muito loucos. Filmei ele brincando, olha só a velocidade! Vale cada centavo,
+                    comprem sem medo!"
+                </p>
+                <div class="review-media-wrapper">
+                    <video class="review-media" controls preload="metadata">
+                        <source
+                            src="https://iqptejsfgxyggswmeggh.supabase.co/storage/v1/object/public/flower/br-11110103-6v65e-mhf7xbgemi9x55.16000051763926722.mp4"
+                            type="video/mp4">
+                    </video>
+                    <div class="verified-badge"> <span style="color: #00ff00;">✓</span> Compra Verificada</div>
+                </div>
+                <div class="review-footer">
+                    <span>Variação: Branco 1:64</span>
+                </div>
+            </div>
+
+            <!-- Review 2 - Video -->
+            <div class="review-card featured">
+                <div class="review-header">
+                    <div class="review-user">
+                        <div class="user-avatar">C</div>
+                        <div class="user-info">
+                            <span class="user-name">Carlos Eduardo</span>
+                            <span class="review-date">Há 5 dias</span>
+                        </div>
+                    </div>
+                    <div class="review-rating">★★★★★</div>
+                </div>
+                <p class="review-text">
+                    "Chegou super rápido aqui no RJ. O acabamento é de primeira, tem até LED que acende de verdade. O
+                    drift obedece muito bem no piso frio. Gravei um teste rápido aí pra vocês verem. Recomendo demais a
+                    loja!"
+                </p>
+                <div class="review-media-wrapper">
+                    <video class="review-media" controls preload="metadata">
+                        <source
+                            src="https://iqptejsfgxyggswmeggh.supabase.co/storage/v1/object/public/flower/br-11110103-6v65e-mhcarqv2ddl35f.16000051763749895.mp4"
+                            type="video/mp4">
+                    </video>
+                    <div class="verified-badge"> <span style="color: #00ff00;">✓</span> Compra Verificada</div>
+                </div>
+                <div class="review-footer">
+                    <span>Variação: Branco 1:64</span>
+                </div>
+            </div>
+
+            <!-- Review 3 - Image (Hot Wheels) -->
+            <div class="review-card">
+                <div class="review-header">
+                    <div class="review-user">
+                        <div class="user-avatar" style="background: #2563eb;">R</div>
+                        <div class="user-info">
+                            <span class="user-name">Rafael M.</span>
+                            <span class="review-date">Há 1 semana</span>
+                        </div>
+                    </div>
+                    <div class="review-rating">★★★★★</div>
+                </div>
+                <p class="review-text">
+                    "Top demais! Encaixa certinho na pista da Hot Wheels, meu moleque montou um circuito e o bichinho
+                    voa baixo! A bateria durou bastante até. A escala é perfeita, nem muito grande nem muito pequeno."
+                </p>
+                <div class="review-media-wrapper">
+                    <img class="review-media"
+                        src="https://iqptejsfgxyggswmeggh.supabase.co/storage/v1/object/public/flower/br-11134103-81z1k-mgi9rlbjb6dc08.webp"
+                        alt="Review image">
+                    <div class="verified-badge"> <span style="color: #00ff00;">✓</span> Compra Verificada</div>
+                </div>
+                <div class="review-footer">
+                    <span>Variação: Branco 1:64</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================
+         PREMIUM DIVIDER
+    ======================================== -->
+        <div class="section-divider">
+            <div class="divider-line"></div>
+            <div class="divider-icon">🏁</div>
+            <div class="divider-line"></div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         FAQ
+    ======================================== -->
+    <section id="faq">
+        <div class="section-header">
+            <p class="section-label">Dúvidas</p>
+            <h2 class="section-title">Perguntas Frequentes</h2>
+        </div>
+
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>O carrinho funciona em qualquer superfície?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Sim! O RC Drift Car funciona perfeitamente em pisos lisos, carpetes de pelo baixo,
+                    pistas Hot Wheels e superfícies externas planas. O sistema de giroscópio garante
+                    estabilidade em diversos terrenos.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Qual a duração da bateria?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    A bateria oferece até 25 minutos de uso contínuo. O tempo de carga via USB-C
+                    é de aproximadamente 45 minutos. Recomendamos ter uma bateria extra para
+                    sessões prolongadas.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>A partir de que idade é recomendado?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Recomendamos para maiores de 8 anos. Crianças menores podem usar com supervisão
+                    de adultos. O produto contém peças pequenas e requer coordenação motora para
+                    controle adequado.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Posso usar vários carrinhos ao mesmo tempo?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Sim! A tecnologia 2.4GHz permite que múltiplos carrinhos operem simultaneamente
+                    sem interferência. Ideal para corridas com amigos e familiares.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>O carrinho é resistente? </span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    Sim! O carrinho é resistente e duradouro, com material de metal!
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question" onclick="toggleFAQ(this)">
+                    <span>Como funciona o drift? É difícil de aprender?</span>
+                    <span class="faq-icon">+</span>
+                </button>
+                <div class="faq-answer">
+                    O sistema de giroscópio facilita muito! Em 5-10 minutos você já consegue fazer
+                    drifts básicos. O controle é muito intuitivo e o manual inclui dicas para manobras avançadas.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         SPECS / TRUST (BEFORE CHECKOUT)
+    ======================================== -->
+    <section id="specs">
+        <div class="section-header">
+            <p class="section-label">Especificações Técnicas</p>
+            <h2 class="section-title">Design & Garantias</h2>
+        </div>
+
+        <div class="specs-grid">
+            <div class="spec-item">
+                <div class="spec-icon">🛡️</div>
+                <h3 class="spec-title">Garantia Blindada</h3>
+                <p class="spec-desc">30 dias de satisfação garantida</p>
+            </div>
+            <div class="spec-item">
+                <div class="spec-icon">🚚</div>
+                <h3 class="spec-title">Frete Grátis</h3>
+                <p class="spec-desc">Entrega rápida Brasil</p>
+            </div>
+            <div class="spec-item">
+                <div class="spec-icon">💳</div>
+                <h3 class="spec-title">Parcelamento</h3>
+                <p class="spec-desc">Até 12x sem juros</p>
+            </div>
+            <div class="spec-item">
+                <div class="spec-icon">📦</div>
+                <h3 class="spec-title">Rastreio Online</h3>
+                <p class="spec-desc">Acompanhe em tempo real</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================
+         GARAGE / CHECKOUT
+    ======================================== -->
+    <section id="garage">
+        <div class="urgency-tag"> PROMOÇÃO ESPECIAL DE NATAL - PRESENTE PERFEITO!</div>
+
+        <div class="garage-container">
+            <div class="garage-left">
+                <h2 class="garage-main-title">Garanta o Melhor Presente de Natal para Seu Filho AGORA com <span
+                        style="color: #00ff00;">50%
+                        OFF</span></h2>
+                <p class="garage-stock">⚡ Enquanto durar o estoque - 7 unidades disponíveis | 🎄 Entrega Garantida antes
+                    do Natal!</p>
+
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span>1x RC Drift Car 1:64</span>
+                        <span class="price-value">R$ 700,00</span>
+                    </div>
+                    <div class="price-row discount-row">
+                        <span>Desconto Promocional (50% OFF)</span>
+                        <span class="price-value">-R$ 350,00</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Frete Grátis</span>
+                        <span class="price-value free">GRÁTIS</span>
+                    </div>
+                </div>
+
+                <div class="total-price">
+                    <span class="total-label">TOTAL</span>
+                    <span class="total-value">R$ 350,00</span>
+                </div>
+                <p class="installment-text">ou 12x de R$ 31,25 sem juros</p>
+
+                <button class="btn-secure-checkout">
+                    FINALIZAR COMPRA SEGURA
+                    <span class="secure-badge">🔒 Ambiente 100% Protegido</span>
+                </button>
+
+                <div class="guarantee-badges">
+                    <div class="badge-item">✓ Garantia de 30 dias</div>
+                    <div class="badge-item">✓ Frete Grátis</div>
+                </div>
+            </div>
+
+            <div class="garage-right">
+                <div class="product-showcase">
+                    <img src="https://iqptejsfgxyggswmeggh.supabase.co/storage/v1/object/public/flower/carrinhoprojeto-ezgif.com-video-to-webp-converter.webp"
+                        alt="RC Drift Car" class="showcase-image">
+                    <div class="showcase-glow"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-icons"
+            style="margin-top: 20px; text-align: center; display: flex; flex-direction: column; align-items: center;">
+            <p
+                style="color: #888; font-size: 0.8em; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;">
+                Formas de Pagamento Seguras</p>
+            <img src="https://iqptejsfgxyggswmeggh.supabase.co/storage/v1/object/public/flower/400-icones-cartoes-de-credito.webp"
+                alt="Formas de Pagamento: Visa, Mastercard, Pix, Boleto"
+                style="max-width: 300px; width: 100%; height: auto; opacity: 0.9;">
+        </div>
+    </section>
+
+    <!-- ========================================
+         FOOTER
+    ======================================== -->
+    <footer>
+        <div class="footer-links">
+            <a href="#privacy">Privacidade</a>
+            <a href="#terms">Termos</a>
+            <a href="#returns">Trocas</a>
+            <a href="#contact">Contato</a>
+        </div>
+        <p class="copyright">© 2025 RC DRIFT 1:64. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- ========================================
+         JAVASCRIPT
+    ======================================== -->
+    <script>
+        // ===== LOADING SCREEN =====
+        let progress = 0;
+        const loadingBar = document.getElementById('loadingBar');
+        const loadingScreen = document.getElementById('loading-screen');
+
+        const loadingInterval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress >= 100) {
+                progress = 100;
+                loadingBar.style.width = '100%';
+                clearInterval(loadingInterval);
+
+                setTimeout(() => {
+                    loadingScreen.classList.add('hidden');
+                }, 500);
+            } else {
+                loadingBar.style.width = progress + '%';
+            }
+        }, 200);
+
+        // ===== PARALLAX SCROLL EFFECT =====
+        const heroBg = document.querySelector('.hero-bg img');
+
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const heroHeight = document.getElementById('hero').offsetHeight;
+
+            if (scrolled < heroHeight) {
+                const parallaxSpeed = scrolled * 0.5;
+                heroBg.style.transform = `translateY(${parallaxSpeed}px) scale(1.1)`;
+                heroBg.style.opacity = 1 - (scrolled / heroHeight) * 0.3;
+            }
+        });
+
+        // ===== FAQ TOGGLE =====
+        function toggleFAQ(button) {
+            const faqItem = button.parentElement;
+            const allItems = document.querySelectorAll('.faq-item');
+
+            // Close all other items
+            allItems.forEach(item => {
+                if (item !== faqItem) {
+                    item.classList.remove('active');
+                }
+            });
+
+            // Toggle current item
+            faqItem.classList.toggle('active');
+        }
+
+        // ===== SMOOTH REVEAL ON SCROLL =====
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.spec-item, .feature-item, .review-card, .gallery-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
+
+        // ===== CAROUSEL AUTOPLAY =====
+        let currentSlideIndex = 1;
+        const totalSlides = 3;
+
+        function showSlide(n) {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const dots = document.querySelectorAll('.dot');
+
+            if (n > totalSlides) currentSlideIndex = 1;
+            if (n < 1) currentSlideIndex = totalSlides;
+
+            slides.forEach(slide => slide.classList.remove('active'));
+            dots.forEach(dot => dot.classList.remove('active'));
+
+            if (slides[currentSlideIndex - 1]) {
+                slides[currentSlideIndex - 1].classList.add('active');
+                dots[currentSlideIndex - 1].classList.add('active');
+            }
+        }
+
+        function currentSlide(n) {
+            currentSlideIndex = n;
+            showSlide(currentSlideIndex);
+        }
+
+        function autoSlide() {
+            currentSlideIndex++;
+            showSlide(currentSlideIndex);
+        }
+
+        // Start autoplay - change slide every 4 seconds
+        setInterval(autoSlide, 4000);
+
+        // ===== CONFIG FROM ORIGINAL =====
+        window.AURORA_CONFIG = {
+            priceOriginal: 700.00,
+            priceDiscount: 350.00,
+            stockTotal: 100,
+            stockRemaining: 7
+        };
+    </script>
+
+</body>
+
+</html>
