@@ -200,29 +200,22 @@
                     Ativo</span>.
             </p>
 
-            <div
-                class="relative w-full max-w-4xl mx-auto aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] group">
+            <div onclick="toggleMute()"
+                class="relative w-full max-w-4xl mx-auto aspect-video rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] group cursor-pointer">
                 <div
                     class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors z-10 pointer-events-none">
                 </div>
 
-                <div
-                    class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none group-hover:opacity-0 transition-opacity duration-300">
-                    <div
-                        class="w-16 h-16 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
-                        <span class="iconify text-white text-3xl ml-1" data-icon="lucide:play"></span>
-                    </div>
-                </div>
+
 
                 <video id="hero-video"
                     src="https://iqptejsfgxyggswmeggh.supabase.co/storage/v1/object/public/flower/Design%20sem%20nome.mp4"
                     class="w-full h-full object-cover" autoplay loop muted playsinline>
                 </video>
 
-                <button onclick="toggleMute()"
-                    class="absolute bottom-4 right-4 z-30 bg-black/60 p-2 rounded-full text-white hover:bg-primary hover:text-black transition-colors">
-                    <span id="sound-icon" class="iconify w-5 h-5" data-icon="lucide:volume-x"></span>
-                </button>
+                <span id="sound-icon"
+                    class="iconify w-6 h-6 text-white absolute bottom-4 right-4 z-30 drop-shadow-md transition-all shadow-black"
+                    data-icon="lucide:volume-x"></span>
             </div>
 
             <div class="mt-10 flex flex-col md:flex-row items-center justify-center gap-4">
@@ -247,7 +240,7 @@
                     class="flex items-center gap-2 text-white font-bold uppercase tracking-wider text-sm opacity-50"><span
                         class="iconify" data-icon="lucide:star"></span> 5.0/5.0 Avaliações</span>
                 <span class="flex items-center gap-2 text-primary font-bold uppercase tracking-wider text-sm"><span
-                        class="iconify" data-icon="lucide:box"></span> +5.000 Entregues</span>
+                        class="iconify" data-icon="lucide:shield-check"></span> Satisfação Garantida</span>
                 <span
                     class="flex items-center gap-2 text-white font-bold uppercase tracking-wider text-sm opacity-50"><span
                         class="iconify" data-icon="lucide:lock"></span> Compra Segura</span>
@@ -258,7 +251,7 @@
                     class="flex items-center gap-2 text-white font-bold uppercase tracking-wider text-sm opacity-50"><span
                         class="iconify" data-icon="lucide:star"></span> 5.0/5.0 Avaliações</span>
                 <span class="flex items-center gap-2 text-primary font-bold uppercase tracking-wider text-sm"><span
-                        class="iconify" data-icon="lucide:box"></span> +5.000 Entregues</span>
+                        class="iconify" data-icon="lucide:shield-check"></span> Satisfação Garantida</span>
                 <span
                     class="flex items-center gap-2 text-white font-bold uppercase tracking-wider text-sm opacity-50"><span
                         class="iconify" data-icon="lucide:lock"></span> Compra Segura</span>
@@ -388,7 +381,7 @@
                             </path>
                         </svg>
                     </div>
-                    <p class="text-neutral-300 text-sm mb-4 leading-relaxed h-20 md:h-auto overflow-hidden">"Meu filho
+                    <p class="text-neutral-300 text-sm mb-4 leading-relaxed">"Meu filho
                         largou o celular! Sério, ele passa o dia montando pistas na sala. O material é muito resistente,
                         já bateu várias vezes e nem riscou."</p>
                     <div class="rounded-lg overflow-hidden border border-white/10 aspect-video bg-black mb-4">
@@ -442,7 +435,7 @@
                             </path>
                         </svg>
                     </div>
-                    <p class="text-neutral-300 text-sm mb-4 leading-relaxed h-20 md:h-auto overflow-hidden">
+                    <p class="text-neutral-300 text-sm mb-4 leading-relaxed">
                         "Impressionante a qualidade. O giroscópio faz toda a diferença, meu filho de 8 anos conseguiu
                         fazer drift em 10 minutos. Chegou super rápido!"</p>
                     <div class="rounded-lg overflow-hidden border border-white/10 aspect-video bg-black mb-4">
@@ -494,7 +487,7 @@
                             </path>
                         </svg>
                     </div>
-                    <p class="text-neutral-300 text-sm mb-4 leading-relaxed h-20 md:h-auto overflow-hidden">"Sou
+                    <p class="text-neutral-300 text-sm mb-4 leading-relaxed">"Sou
                         colecionador e esse carrinho é outro nível. O acabamento é premium e a bateria dura bastante.
                         Recomendo demais!"</p>
                     <div class="rounded-lg overflow-hidden border border-white/10 aspect-video bg-black mb-4">
@@ -548,7 +541,7 @@
                             </path>
                         </svg>
                     </div>
-                    <p class="text-neutral-300 text-sm mb-4 leading-relaxed h-20 md:h-auto overflow-hidden">"O farol
+                    <p class="text-neutral-300 text-sm mb-4 leading-relaxed">"O farol
                         acende de verdade! Meu gato ficou louco correndo atrás. Muito divertido."</p>
                     <div class="rounded-lg overflow-hidden border border-white/10 aspect-video bg-black mb-4 relative">
                         <div class="absolute inset-0 bg-black/60"></div>
@@ -652,7 +645,7 @@
                             </div>
                         </div>
 
-                        <a href="#checkout"
+                        <a href="https://racingkids.com.br/products/carrinho-de-controle-remoto-1-64?variant=48224928399603"
                             class="group relative block w-full text-center bg-gradient-to-r from-primary to-primaryDark text-black font-black text-lg uppercase tracking-widest py-5 rounded-xl shadow-[0_0_30px_rgba(0,255,136,0.3)] hover:shadow-[0_0_50px_rgba(0,255,136,0.5)] transition-all transform hover:-translate-y-1 overflow-hidden">
                             <span class="relative z-10 flex items-center justify-center gap-2">
                                 Comprar Agora <span class="iconify group-hover:translate-x-1 transition-transform"
@@ -721,7 +714,7 @@
 
     <div id="sticky-cta"
         class="fixed bottom-0 left-0 w-full p-4 z-50 bg-black/90 backdrop-blur-lg border-t border-white/10 md:hidden translate-y-full transition-transform duration-300">
-        <a href="#offer"
+        <a href="https://racingkids.com.br/products/carrinho-de-controle-remoto-1-64?variant=48224928399603"
             class="flex items-center justify-between bg-primary text-black font-bold uppercase tracking-wide px-6 py-4 rounded-xl shadow-[0_0_20px_rgba(0,255,136,0.3)]">
             <span>Comprar Agora</span>
             <span class="bg-black/20 px-2 py-1 rounded text-sm">-50% OFF</span>
